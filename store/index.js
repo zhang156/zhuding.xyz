@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Service from '../plugins/axios'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,9 @@ export default () => new Vuex.Store({
   },
   actions: {
     increment ({ commit }) {
-      commit('updateArticleList', [1,2,3,4])
+      Service.get('/article', (res) => {
+        commit('updateArticleList', res.data)
+      })
     }
   },
   modules: {
