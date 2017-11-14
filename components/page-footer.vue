@@ -20,7 +20,7 @@ export default {
     width: 100%;
     position: relative;
     z-index: 1;
-    padding: 1em;
+    padding: .5em;
     color: #555;
 
     .foot_content {

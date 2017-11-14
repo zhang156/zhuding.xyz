@@ -14,9 +14,9 @@ export default () => new Vuex.Store({
     }
   },
   actions: {
-    increment ({ commit }) {
-      Service.get('/article', (res) => {
-        commit('updateArticleList', res.data)
+    loadArticles ({ commit }) {
+      return Service.get('/article').then((res) => {
+        commit('updateArticleList', res.data.article)
       })
     }
   },

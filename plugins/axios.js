@@ -2,7 +2,14 @@ import Vue from 'vue'
 import axios from 'axios'
 
 const service = axios.create({
-    baseURL: 'http://localhost:8001/'
+    baseURL: 'http://localhost:8001/',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    proxy: {
+        host: '127.0.0.1',
+        port: 8001
+    }
 })
 
 // 拦截器

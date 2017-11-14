@@ -23,8 +23,15 @@
 /* eslint-disable */
 import articleList from '~/components/article-list'
 import pageFooter from '~/components/page-footer.vue'
+import Service from '~/plugins/axios'
 
 export default {
+  name: 'index',
+  fetch ({ store }) {
+    return Promise.all([
+      store.dispatch('loadArticles')
+    ])
+  },
   components: {articleList, pageFooter},
   data () {
     return {
@@ -45,10 +52,6 @@ export default {
     articles () {
       return this.$store.state.article.articleList
     }
-  },
-  created () {
-    // this.$store.commit('updateArticleList', [1,2,3])
-    this.$store.dispatch('increment')
   },
   mounted () {
     this.swiperShow = true;
