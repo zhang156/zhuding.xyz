@@ -14,19 +14,21 @@ export default () => new Vuex.Store({
     }
   },
   actions: {
-    loadArticles ({ commit }) {
-      return Service.get('/article').then((res) => {
-        commit('updateArticleList', res.data.article)
+    loadArticles ({ commit }, params = {page: 1}) {
+      return Service.get('/article', { params }).then((res) => {
+        console.log(res.data.result.data[0])
+        commit('loadArticles', res.data.result.data)
       })
     }
   },
   modules: {
+    // 文章
     article: {
       state: {
         articleList: []
       },
       mutations: {
-        updateArticleList (state, param) {
+        loadArticles (state, param) {
           state.articleList = param
         }
       }
