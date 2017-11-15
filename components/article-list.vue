@@ -4,7 +4,7 @@
       <div class="item_content clear">
         <!-- thumb -->
         <div class="item_thumb">
-          <a href="">
+          <a href="/article/01">
             <img :src="item.thumb" alt="">
           </a>
         </div>
@@ -20,7 +20,7 @@
           <!-- 日期 -->
           <span class="meta meta_createDate">
             <i class="iconfont icon-riqi"></i>
-            <span class="meta_text">{{ format(item.create_at) }}</span>
+            <span class="meta_text">{{ item.create_at | toYMD }}</span>
           </span>
 
           <!-- 阅读量 -->
@@ -59,14 +59,11 @@ export default {
   props: {
     articles: Array
   },
-  computed: {
-    format(date) {
-      return date
-    }
-  },
+  computed: {},
   data () {
     return {}
-  }
+  },
+  methods: {}
 }
 </script>
 

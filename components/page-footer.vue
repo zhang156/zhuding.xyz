@@ -26,7 +26,8 @@ export default {
     .foot_content {
       width: 100%;
       padding: 1em;
-      font-size: .9em;
+      font-size: 1em;
+      line-height: 1em;
       text-align: center;
       word-spacing: 4px;
     }

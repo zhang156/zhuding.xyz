@@ -25,9 +25,11 @@ export default {
   #asside {
     float: right;
     width: 19em;
-    margin: 5.5em calc(50% - 42em) 0 0;
+    padding-top: 5.5em;
+    margin-right: calc(50% - 42em);
     position: relative;
     z-index: 1;
+    min-height: calc(100vh - 4em);
 
     .search {
       padding: 5px 5px;

@@ -65,13 +65,8 @@ export default {
 @import "~assets/sass/mixins.scss";
 
 .content {
-  position: relative;
-  padding-top: 5.5em;
-  z-index: 1;
-  margin: 0 auto;
-  width: 42.5em;
-  background: transparent;
-
+  width: 100%;
+  
   .banner_content {
     width: 100%;
     height: 15em;

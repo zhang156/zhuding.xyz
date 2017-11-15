@@ -13,9 +13,11 @@
       <!-- asside -->
       <asside></asside>
 
-      <keep-alive>
-        <nuxt/>
-      </keep-alive>
+      <div class="main_content">
+        <keep-alive>
+          <nuxt/>
+        </keep-alive>
+      </div>
     </div>
     
     <!-- footer -->
@@ -56,6 +58,15 @@ export default {
 
     .main {
       width: 100%;
+
+      .main_content {
+        position: relative;
+        padding-top: 5.5em;
+        z-index: 1;
+        margin: 0 auto;
+        width: 42.5em;
+        background: transparent;
+      }
     }
   }
 </style>

@@ -1,7 +1,8 @@
 module.exports = {
   plugins: [
     {src: '~/plugins/TweenLite'},
-    {src: '~/plugins/swiper', ssr: false}
+    {src: '~/plugins/swiper', ssr: false},
+    {src: '~/plugins/dateFormat'}
   ],
   /*
   ** Headers of the page
@@ -43,7 +44,8 @@ module.exports = {
     //   }
     // },
     vendor: [
-      'swiper'
+      'swiper',
+      'axios'
     ]      
   }
 }
