@@ -16,8 +16,14 @@ export default () => new Vuex.Store({
   actions: {
     loadArticles ({ commit }, params = {page: 1}) {
       return Service.get('/article', { params }).then((res) => {
-        console.log(res.data.result.data[0])
+        // console.log(res.data.result.data[0])
         commit('loadArticles', res.data.result.data)
+      })
+    },
+    loadArticleDetail ({ commit }, params) {
+      return Service.get(`/article/${params.article_id}`).then((res) => {
+        console.log(res.data.result)
+        commit('loadArticleDetail', res.data.result)
       })
     }
   },
@@ -25,11 +31,15 @@ export default () => new Vuex.Store({
     // 文章
     article: {
       state: {
-        articleList: []
+        articleList: [],
+        articleDetail: {}
       },
       mutations: {
         loadArticles (state, param) {
           state.articleList = param
+        },
+        loadArticleDetail (state, param) {
+          state.articleDetail = param
         }
       }
     }

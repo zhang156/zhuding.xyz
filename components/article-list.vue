@@ -4,7 +4,7 @@
       <div class="item_content clear">
         <!-- thumb -->
         <div class="item_thumb">
-          <a href="/article/01">
+          <a :href="`/article/${item.id}`">
             <img :src="item.thumb" alt="">
           </a>
         </div>
@@ -132,7 +132,8 @@ export default {
 
               &:hover {
                 text-decoration: underline;
-                margin-right: .5em;
+                // transform: translateX(.5em)
+                margin-left: .5em;
               }
             }
           }

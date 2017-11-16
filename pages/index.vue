@@ -23,7 +23,6 @@
 /* eslint-disable */
 import articleList from '~/components/article-list'
 import pageFooter from '~/components/page-footer.vue'
-import Service from '~/plugins/axios'
 
 export default {
   name: 'index',
@@ -37,7 +36,7 @@ export default {
     return {
       banners: ['/images/lunbo1.jpg', '/images/lunbo2.jpg'],
       swiperOption: {
-        autoplay: 5000,
+        autoplay: 3000,
         initialSlide: 0,
         loop: true,
         pagination: '.swiper-pagination',

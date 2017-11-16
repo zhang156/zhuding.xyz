@@ -1,8 +1,11 @@
 module.exports = {
   plugins: [
     {src: '~/plugins/TweenLite'},
+    {src: '~/plugins/dateFormat'},
+    {src: '~/plugins/marked'},
+    {src: '~/plugins/highlight'},
     {src: '~/plugins/swiper', ssr: false},
-    {src: '~/plugins/dateFormat'}
+    {src: '~/plugins/image-popup', ssr: false}
   ],
   /*
   ** Headers of the page
@@ -27,6 +30,7 @@ module.exports = {
   */
   css: [
     'swiper/dist/css/swiper.css',
+    'highlight.js/styles/ocean.css',
     {src: '~assets/sass/app.scss', lang: 'sass'}
   ],
   build: {
@@ -45,7 +49,8 @@ module.exports = {
     // },
     vendor: [
       'swiper',
-      'axios'
+      'axios',
+      'marked'
     ]      
   }
 }
