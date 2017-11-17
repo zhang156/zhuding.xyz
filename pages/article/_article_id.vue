@@ -41,10 +41,6 @@ export default {
       text-align: center;
       color: #555;
     }
-
-    .article_content {
-      
-    }
   }
 </style>
 
@@ -53,7 +49,7 @@ export default {
   @import '~assets/sass/mixins.scss';
   .article_content {
 
-    /* a {
+    a {
       font-weight: bold;
       margin: 0 .1em;
 
@@ -64,7 +60,7 @@ export default {
       &:hover {
         text-decoration: underline;
       }
-    } */
+    }
 
     img {
       max-width: 100%;
@@ -148,13 +144,13 @@ export default {
       }
     }
 
-    code {
+    /* code {
       color: #bd4147;
       padding: .3em .5em;
       margin: 0 .5em;
-      // border-radius: $radius;
+      border-radius: $radius;
       background-color: $module-hover-bg;
-    }
+    } */
 
     pre {
       display: block;
@@ -195,7 +191,8 @@ export default {
         left: 0;
         top: 2.8em;
         margin: 0;
-        padding: 1em 0;
+        // padding: 1em 0;
+        padding: .5em 0em;
         width: 2.5em;
         height: calc(100% - 2.8em);
         text-align: center;
