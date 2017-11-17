@@ -144,13 +144,13 @@ export default {
       }
     }
 
-    /* code {
+    code {
       color: #bd4147;
       padding: .3em .5em;
       margin: 0 .5em;
       border-radius: $radius;
       background-color: $module-hover-bg;
-    } */
+    }
 
     pre {
       display: block;
