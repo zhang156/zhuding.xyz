@@ -22,14 +22,14 @@
     </div>
 
     <!-- calendar -->
-    <div>
+    <div class="calendar_wrap">
       <calendar></calendar>
     </div>
   </div>
 </template>
 
 <script>
-import calendar from 'calendar'
+import calendar from '~/components/calendar'
 export default {
   name: 'aside',
   components: {calendar},
@@ -142,6 +142,10 @@ export default {
           
         }
       }
+    }
+
+    .calendar_wrap {
+      margin-top: 1rem;
     }
   }
 </style>
