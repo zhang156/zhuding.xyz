@@ -72,8 +72,6 @@ export default {
       } else {
         ++this.currMonth
       }
-      console.log(this.currMonth)
-      console.log(new Date(this.currYear + '-' + this.currMonth + '-01'))
       this.date_init(new Date(this.currYear + '-' + this.currMonth + '-01'))
     },
     date_init(date) {
@@ -155,6 +153,7 @@ export default {
   .calendar {
     padding: .5rem .5rem;
     background: #fff;
+    border-radius: 4px;
 
     .calendar_head {
       padding: .5rem .5rem 1rem;
