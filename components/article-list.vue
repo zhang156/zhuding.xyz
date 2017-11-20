@@ -4,14 +4,14 @@
       <div class="item_content clear">
         <!-- thumb -->
         <div class="item_thumb">
-          <a :href="`/article/${item.id}`">
+          <router-link :to="`/article/${item.id}`">
             <img :src="item.thumb" alt="">
-          </a>
+          </router-link>
         </div>
 
         <!-- title & description -->
         <div class="item_body">
-          <h4><a href="">{{ item.title }}</a></h4>
+          <h4><router-link :to="`/article/${item.id}`">{{ item.title }}</router-link></h4>
           <p>{{ item.description }}</p>
         </div>
 

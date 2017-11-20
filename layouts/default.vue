@@ -44,10 +44,17 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
+      this.sizeInit()
+      window.onresize = () => {
+        this.sizeInit()
+      }
+    })
+  },
+  methods: {
+    sizeInit () {
       this.canvasW = window.document.body.clientWidth;
       this.canvasH = window.document.body.clientHeight;
-      console.log(this.canvasW, this.canvasH)
-    })
+    }
   }
 }
 </script>
@@ -73,11 +80,6 @@ export default {
 
 
 <style lang="scss">
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -87,17 +89,5 @@ html {
   // -moz-osx-font-smoothing: grayscale;
   // -webkit-font-smoothing: antialiased;
   // box-sizing: border-box;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  box-sizing: border-box;
-  color: #555;
-}
-
-#__nuxt {
-  height: 100%;
 }
 </style>

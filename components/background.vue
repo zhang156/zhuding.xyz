@@ -223,7 +223,8 @@ export default {
   #background {
     width: 100%;
     height: 100%;
-    background: #eeeeee;
+    background: url(~/assets/img/bg2.jpg) 0 0 no-repeat;
+    background-size: cover;
     position: fixed;
     z-index: 0;
   }
