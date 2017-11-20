@@ -4,8 +4,10 @@ module.exports = {
     {src: '~/plugins/dateFormat'},
     {src: '~/plugins/marked'},
     {src: '~/plugins/highlight'},
+    {src: '~/plugins/element-ui'},
     {src: '~/plugins/swiper', ssr: false},
-    {src: '~/plugins/image-popup', ssr: false}
+    {src: '~/plugins/image-popup', ssr: false},
+    {src: '~/plugins/copy', ssr: false}
   ],
   /*
   ** Headers of the page
@@ -31,6 +33,7 @@ module.exports = {
   css: [
     'swiper/dist/css/swiper.css',
     'highlight.js/styles/ocean.css',
+    'element-ui/lib/theme-chalk/index.css',
     {src: '~assets/sass/app.scss', lang: 'sass'}
   ],
   build: {
@@ -50,7 +53,8 @@ module.exports = {
     vendor: [
       'swiper',
       'axios',
-      'marked'
+      'marked',
+      'element-ui'
     ]      
   }
 }

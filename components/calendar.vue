@@ -172,6 +172,8 @@ export default {
 
           &:hover {
             cursor: pointer;
+            background: hsla(0,0%,77%,.2);
+            border-radius: 100%;
           }
         }
 

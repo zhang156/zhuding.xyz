@@ -176,6 +176,10 @@ textarea {
   max-width: 100%;
 }
 
+ul, li {
+  list-style: none;
+}
+
 *,
 ::before,
 ::after {
@@ -188,7 +192,22 @@ textarea {
 	line-height: inherit;
 }
 
-ul, li {
-  list-style: none;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  color: #555;
+}
+
+#__nuxt {
+  height: 100%;
 }
 

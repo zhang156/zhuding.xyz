@@ -1,12 +1,26 @@
 <template>
   <div class="article">
-    <div class="article_title">{{ article.title }}</div>
-    <div class="article_content" v-html="articleDetail"></div>
+    <div class="article_wrap">
+      <div class="article_title">{{ article.title }}</div>
+      <div class="article_content" v-html="articleDetail"></div>
+    </div>
+
+    <div class="article_info">
+      <p>本文于{{ article.create_at | toYMD }}发布于{{article.category.length?article.category[0]:'CODE'}}分类下，当前已被浏览{{article.meta.views}}次</p>
+      <p>相关标签：{{ article.tag.length?article.tag.join('、'):'web开发' }}</p>
+      <p>临时地址：<router-link :to="`http://zhuding.xyz${$route.path}`">{{`http://zhuding.xyz${$route.path}`}}</router-link></p>
+      <p>版权申明：自由转载-署名-非商业性使用</p>
+    </div>
+
+    <div class="comments_wrap">
+      <comment></comment>
+    </div>
   </div>
 </template>
 
 <script>
 import marked from '~/plugins/marked.js'
+import comment from '~/components/comment'
 
 export default {
   name: 'articleId',
@@ -16,6 +30,7 @@ export default {
   fetch ({ store, params }) {
     return store.dispatch('loadArticleDetail', params)
   },
+  components: {comment},
   computed: {
     article () {
       return this.$store.state.article.articleDetail
@@ -32,14 +47,33 @@ export default {
   @import '~assets/sass/mixins.scss';
 
   .article {
-    background: #fff;
-    padding: 1em 2em;
+    margin-bottom: 1rem;
 
-    .article_title {
-      font-size: 2em;
-      padding: .5em 0 1em;
-      text-align: center;
-      color: #555;
+    .article_wrap {
+      background: #fff;
+      padding: 1em 2em;
+
+      .article_title {
+        font-size: 2em;
+        padding: .5em 0 1em;
+        text-align: center;
+        color: #555;
+      }
+    }
+
+    .article_info {
+      margin-top: 1rem;
+      background: #fff;
+      padding: 1em 2em;
+
+      p {
+        padding: .5rem 0;
+        a {
+          color: #555;
+          text-decoration: underline;
+        }
+      }
+      
     }
   }
 </style>
