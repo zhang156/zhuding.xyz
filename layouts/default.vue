@@ -62,9 +62,13 @@ export default {
 <style lang="scss" scoped>
   #app {
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 
     .main {
       width: 100%;
+      flex: 1;
 
       .main_content {
         position: relative;

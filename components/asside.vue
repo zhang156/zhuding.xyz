@@ -60,6 +60,7 @@ export default {
     .search {
       padding: 5px 5px;
       background: #fff;
+      border-radius: 4px;
 
       .search_input {
         background-color: hsla(0,0%,77%,.4);

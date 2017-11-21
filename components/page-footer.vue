@@ -40,11 +40,14 @@ export default {
       }
 
       a {
+        height: 28px;
         vertical-align: middle;
         display: inline-block;
         
         #i-github {
           color: #555;
+          position: relative;
+          top: -2px;
         }
       }
     }
