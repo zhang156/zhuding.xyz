@@ -5,6 +5,7 @@ module.exports = {
     {src: '~/plugins/marked'},
     {src: '~/plugins/highlight'},
     {src: '~/plugins/element-ui'},
+    {src: '~/plugins/codemirror', ssr: false},
     {src: '~/plugins/swiper', ssr: false},
     {src: '~/plugins/image-popup', ssr: false},
     {src: '~/plugins/copy', ssr: false}

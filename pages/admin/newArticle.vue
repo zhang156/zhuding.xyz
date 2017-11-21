@@ -27,7 +27,7 @@
             </el-form-item>
 
             <el-form-item label="文章内容">
-
+              <codemirror v-model="form.code" :options="editorOptions"></codemirror>
             </el-form-item>
           </el-form>
         </div>
@@ -54,7 +54,14 @@ export default {
       tags: [{name: 'Javascript'},{name: 'Html5'},{name: 'Css'},
              {name: 'Mongodb'}, {name: 'Linux'}, {name: 'Webpack'},
              {name: 'Vue'}, {name: 'Nuxt'}],
-      activeTags: []
+      activeTags: [],
+      editorOptions: {
+        tabSize: 4,
+        mode: 'text/javascript',
+        theme: 'base16-dark',
+        lineNumbers: true,
+        line: true
+      }
     }
   },
   created () {
