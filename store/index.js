@@ -24,13 +24,13 @@ export default () => new Vuex.Store({
     },
     loadArticles ({ commit }, params = {page: 1}) {
       return Service.get('/article', { params }).then((res) => {
-        // console.log(res.data.result.data[0])
+        console.log(res.data.result.data[0])
         commit('loadArticles', res.data.result.data)
       })
     },
     loadHotArticles ({ commit }, params = {page: 1}) {
       return Service.get('/hotArticle', { params }).then((res) => {
-        console.log(res.data.result.data)
+        // console.log(res.data.result.data)
         commit('loadHotArticles', res.data.result.data)
       })
     },

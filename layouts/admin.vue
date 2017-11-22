@@ -11,24 +11,25 @@
         <el-aside class="aside">
           <el-menu class="aside_menu"
             router
-            default-active="1"
+            unique-opened
+            :default-active="$route.path"
             background-color="#23282d"
             text-color="#ebebeb"
             active-text-color="#ffd04b">
             
-            <el-menu-item index="1" :route="{path:'/admin'}">
+            <el-menu-item index="/admin" :route="{path:'/admin'}">
               <template solt="title">
                 <i class="iconfont icon-home"></i>
                 <span>首页</span>
               </template>
             </el-menu-item>
 
-            <el-submenu index="2">
+            <el-submenu index="article">
               <template slot="title">
                 <i class="iconfont icon-wenzhangguanli"></i>
                 <span>文章管理</span>
               </template>
-              <el-menu-item index="2-1" :route="{path:'/admin/newArticle'}">全部文章</el-menu-item>
+              <el-menu-item index="/admin/newArticle" :route="{path:'/admin/newArticle'}">全部文章</el-menu-item>
             </el-submenu>
 
           </el-menu>
@@ -46,6 +47,8 @@
 
 <script>
 export default {
+  name: '',
+  created () {}
 }
 </script>
 

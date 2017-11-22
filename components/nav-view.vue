@@ -5,11 +5,11 @@
         <i class="iconfont icon-home"></i>
         <span class="item_title">home</span>
       </nuxt-link>
-      <nuxt-link to="/aa" class="item">
+      <nuxt-link to="/code" class="item">
         <i class="iconfont icon-code"></i>
         <span class="item_title">code</span>
       </nuxt-link>
-      <nuxt-link to="/aa" class="item">
+      <nuxt-link to="/project" class="item">
         <i class="iconfont icon-xiangmu"></i>
         <span class="item_title">project</span>
       </nuxt-link>

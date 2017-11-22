@@ -4,6 +4,7 @@ import axios from 'axios'
 const service = axios.create({
     baseURL: 'http://localhost:8001/'
 })
+service.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8'
 
 // 拦截器
 service.interceptors.request.use(config => {
@@ -19,4 +20,5 @@ service.interceptors.response.use(response => {
 })
 
 Vue.prototype.$http = axios
+
 export default service
