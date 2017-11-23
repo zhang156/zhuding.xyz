@@ -29,7 +29,7 @@
                 <i class="iconfont icon-wenzhangguanli"></i>
                 <span>文章管理</span>
               </template>
-              <el-menu-item index="/admin/newArticle" :route="{path:'/admin/newArticle'}">全部文章</el-menu-item>
+              <el-menu-item index="/admin/allArticles" :route="{path:'/admin/allArticles'}">全部文章</el-menu-item>
             </el-submenu>
 
           </el-menu>
@@ -42,6 +42,7 @@
         </el-main>
       </el-container>
     </el-container>
+    
   </div>
 </template>
 

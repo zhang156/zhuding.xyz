@@ -1,7 +1,7 @@
 <template>
-  <div class="newArticle">
+  <div class="article">
     <div class="card_wrap">
-      <card :title="title">
+      <card title="撰写新文章">
         <div slot="card_content" class="article_content">
           <el-form ref="form" :model="form" 
             label-width="120px">
@@ -53,33 +53,13 @@
         <div slot="card_content" class="publish_content">
           <div class="publish_content_item">
             <label>状态</label>
-            <el-select v-model="form.state">
-              <!-- <el-option 
-                v-for="item in stateOptions" 
-                :key="item.value"
-                :label="item.label"
-                :vlaue="item.value">
-              </el-option> -->
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
+            <zSelect v-model="form.state" :options="stateOptions"></zSelect>
           </div>
 
-          <!-- <div class="publish_content_item">
+          <div class="publish_content_item">
             <label>公开度</label>
-            <el-select v-model="form.public">
-              <el-option 
-                v-for="item in publicOptions" 
-                :key="item.value"
-                :label="item.label"
-                :vlaue="item.value">
-              </el-option>
-            </el-select>
-          </div> -->
+            <zSelect v-model="form.public" :options="publicOptions"></zSelect>
+          </div>
         </div>
       </card>
     </div>
@@ -89,14 +69,20 @@
 <script>
 import card from '~/components/card'
 import Service from '~/plugins/axios.js'
+import zSelect from '~/components/zSelect'
 
 export default {
-  name: 'newArticle',
-  layout: 'admin',
-  components: { card },
+  name: 'article',
+  components: { card, zSelect },
+  props: {
+    form: Object,
+    tags: Array,
+    category: Array,
+    stateOptions: Array,
+    publicOptions: Array
+  },
   data () {
     return {
-      title: '撰写新文章',
       form: {description: '', content: '', tag: [], category: [], state: 1, public: 1},
       tags: [{name: 'Javascript'},{name: 'Html5'},{name: 'Css'},
              {name: 'Mongodb'}, {name: 'Linux'}, {name: 'Webpack'},
@@ -123,6 +109,7 @@ export default {
     saveArticle () {
       this.getActiveTags()
       console.log(this.form)
+      return
       Service.post('/article', this.form).then((res) => {
         console.log(res)
       })
@@ -146,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .newArticle {
+  .article {
     display: flex;
 
     .card_wrap {
@@ -180,14 +167,21 @@ export default {
       }
 
       .publish {
-
+        .publish_content {
+          .publish_content_item {
+            label {
+              display: inline-block;
+              width: 80px;
+            }
+          }
+        }
       }
     }
   }
 </style>
 
 <style lang="scss">
-  .newArticle {
+  .article {
     .el-form-item__label {
       color: #fff;
     }
