@@ -67,14 +67,17 @@ export default {
     flex-direction: column;
 
     .main {
-      width: 100%;
+      width: 75rem;
       flex: 1;
+      margin: 0 auto;
+      padding-top: 5.5em;
 
       .main_content {
         position: relative;
-        padding-top: 5.5em;
+        float: left;
         z-index: 1;
-        margin: 0 auto;
+        // margin: 0 auto;
+        margin-left: 12.5rem;
         width: 42.5em;
         background: transparent;
       }

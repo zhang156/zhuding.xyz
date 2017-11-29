@@ -28,15 +28,15 @@ export default {
 
   #nav-view {
     position: fixed;
-    top: 5.5em;
-    left: calc(50% - 35em);
-    width: 11.5em;
+    top: 5.5rem;
+    left: calc(50% - 37.5rem);
+    width: 11.5rem;
 
     .nav_list {
       width: 100%;
 
       .item {
-        padding: .8em 1.2em;
+        padding: .8rem 1.2rem;
         color: #777;
         display: block;
         background: transparent;
@@ -46,13 +46,13 @@ export default {
         }
 
         .iconfont {
-          font-size: 1.4em;
-          margin-right: .5em;
+          font-size: 1.4rem;
+          margin-right: .5rem;
           vertical-align: bottom;
         }
 
         .item_title {
-          font-size: 1.1em;
+          font-size: 1.1rem;
           vertical-align: bottom;
           text-transform: uppercase;
         }

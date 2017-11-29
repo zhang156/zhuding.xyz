@@ -24,8 +24,10 @@ export default () => new Vuex.Store({
     },
     // 获取文章列表
     loadArticles ({ commit }, params = {page: 1}) {
+      commit('requestStart')
       return Service.get('/article', { params }).then((res) => {
         // console.log(res.data.result.data[0])
+        commit('requestEnd')
         commit('loadArticles', res.data.result.data)
       })
     },
@@ -67,9 +69,16 @@ export default () => new Vuex.Store({
       state: {
         articleList: [],
         articleDetail: {},
-        hotArticle: []
+        hotArticle: [],
+        fetching: false
       },
       mutations: {
+        requestStart (state) {
+          state.fetching = true
+        },
+        requestEnd (state) {
+          state.fetching = false
+        },
         loadArticles (state, param) {
           state.articleList = param
         },

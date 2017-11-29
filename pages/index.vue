@@ -1,21 +1,27 @@
 <template>
   <section class="content">
-    <!-- 图片轮播 -->
-    <div v-swiper:mySwiper="swiperOption" style="background:#fff;">
-      <transition name="module">
-        <div class="swiper-wrapper" v-show="swiperShow">
-          <div class="swiper-slide" v-for="(banner,index) in banners" :key="index">
-            <div class="banner_content">
-              <img :src="banner">
+    <loading v-if="fetching"></loading>
+
+    <template v-if="articles.length && !fetching">
+      <!-- 图片轮播 -->
+      <div v-swiper:mySwiper="swiperOption" style="background:#fff;">
+        <transition name="module">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(banner,index) in banners" :key="index">
+              <div class="banner_content">
+                <img :src="banner">
+              </div>
             </div>
           </div>
-        </div>
-      </transition>
-      <div class="swiper-pagination swiper-pagination-bullets"></div>
-    </div>
+        </transition>
+        <div class="swiper-pagination swiper-pagination-bullets"></div>
+      </div>
 
-    <!-- 文章块 -->
-    <article-list :articles="articles"></article-list>
+      <!-- 文章块 -->
+      <article-list :articles="articles"></article-list>
+    </template>
+    
+    <empty v-if="!articles.length && !fetching"></empty>
   </section>
 </template>
 
@@ -23,6 +29,8 @@
 /* eslint-disable */
 import articleList from '~/components/article-list'
 import pageFooter from '~/components/page-footer.vue'
+import empty from '~/components/empty.vue'
+import loading from '~/components/loading.vue'
 
 export default {
   name: 'index',
@@ -31,7 +39,7 @@ export default {
       store.dispatch('loadArticles')
     ])
   },
-  components: {articleList, pageFooter},
+  components: {articleList, pageFooter, empty, loading},
   data () {
     return {
       banners: ['/images/lunbo1.jpg', '/images/lunbo2.jpg'],
@@ -43,18 +51,18 @@ export default {
         onSlideChangeEnd: swiper => {
           // console.log('onSlideChangeEnd', swiper.realIndex)
         }
-      },
-      swiperShow: false
+      }
     }
   },
   computed : {
     articles () {
       return this.$store.state.article.articleList
+    },
+    fetching () {
+      return this.$store.state.article.fetching
     }
   },
-  mounted () {
-    this.swiperShow = true;
-  },
+  mounted () {},
   methods: {}
 }
 </script>
@@ -65,6 +73,7 @@ export default {
 
 .content {
   width: 100%;
+  position: relative;
   
   .banner_content {
     width: 100%;

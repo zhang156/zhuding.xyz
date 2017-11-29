@@ -50,12 +50,11 @@ export default {
 
   #asside {
     float: right;
-    width: 19em;
-    padding-top: 5.5em;
-    margin-right: calc(50% - 42em);
+    width: 19rem;
+    // margin-right: calc(50% - 42rem);
     position: relative;
     z-index: 1;
-    min-height: calc(100vh - 4em);
+    min-height: calc(100vh - 9.5rem);
 
     .search {
       padding: 5px 5px;
@@ -76,9 +75,9 @@ export default {
       .searchbar {
         display: inline-block;
         // font-size: 1.2em;
-        height: 2em;
-        width: 2em;
-        line-height: 2em;
+        height: 2rem;
+        width: 2rem;
+        line-height: 2rem;
         text-align: center;
         background-color: hsla(0,0%,57%,.4);
         vertical-align: middle;
@@ -91,9 +90,9 @@ export default {
       border-radius: 4px;
       
       .hot_articles_title {
-        height: 3em;
-        line-height: 2em;
-        padding: .5em 1em;
+        height: 3rem;
+        line-height: 2rem;
+        padding: .5rem 1rem;
         text-align: left;
         color: #333;
         position: relative;
@@ -112,16 +111,16 @@ export default {
       }
 
       ul.hot_articles_list {
-        padding: 1em;
+        padding: 1rem;
         li {  
-          height: 1.8em;
-          line-height: 1.8em;
+          height: 1.8rem;
+          line-height: 1.8rem;
 
           > span{
             display: inline-block;
-            width: 1.2em;
-            height: 1.2em;
-            line-height: 1.2em;
+            width: 1.2rem;
+            height: 1.2rem;
+            line-height: 1.2rem;
             text-align: center;
             background: rgba(204, 204, 204, 0.8);
             color: #fff;
@@ -129,14 +128,14 @@ export default {
 
           >a {
             display: inline-block;
-            margin-left: .6em;
+            margin-left: .6rem;
             color: #555;
-            line-height: 1em;
+            line-height: 1rem;
 
             &:hover {
               text-decoration: underline;
               color: #333;
-              transform: translateX(.5em);
+              transform: translateX(.5rem);
               cursor: pointer;
             }
           }
