@@ -2,7 +2,7 @@
   <div class="empty">
     <div v-if="isSearch" class="emptySearch">
       <span><i class="iconfont icon-sousuo"></i></span>
-      <span>{{ '未找到与'+searchKey+'有关的文章' }}</span>
+      <span>{{ '未找到与"'+searchKey+'"有关的文章' }}</span>
     </div>
     <div class="emptyText">{{ emptyText }}</div>
   </div>
@@ -17,7 +17,7 @@ export default {
       default: '暂时没有相关文章，敬请期待'
     },
     isSearch: Boolean,
-    searchKey: String
+    searchKey: { type: String, default: '' }
   }
 }
 </script>

@@ -75,19 +75,12 @@ export default {
   name: 'article',
   components: { card, zSelect },
   props: {
-    form: Object,
-    tags: Array,
-    category: Array,
-    stateOptions: Array,
-    publicOptions: Array
+    form: { type: Object, default: {description: '', content: '', tag: [], category: [], state: 1, public: 1} },
+    tags: { type: Array, default: [] },
+    category: { type: Array, default: [] }
   },
   data () {
     return {
-      form: {description: '', content: '', tag: [], category: [], state: 1, public: 1},
-      tags: [{name: 'Javascript'},{name: 'Html5'},{name: 'Css'},
-             {name: 'Mongodb'}, {name: 'Linux'}, {name: 'Webpack'},
-             {name: 'Vue'}, {name: 'Nuxt'}],
-      category: ['Code', 'Think'],
       stateOptions: [{label: '直接发布', value: 1}, {label: '保存草稿', value: 2}],
       publicOptions: [{label: '公开', value: 1}, {label: '私密', value: 2}],
       editorOptions: {
