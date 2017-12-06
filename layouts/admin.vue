@@ -30,6 +30,7 @@
                 <span>文章管理</span>
               </template>
               <el-menu-item index="/admin/allArticles" :route="{path:'/admin/allArticles'}">全部文章</el-menu-item>
+              <el-menu-item index="/admin/publishArticle" :route="{path:'/admin/publishArticle'}">发布文章</el-menu-item>
             </el-submenu>
 
           </el-menu>

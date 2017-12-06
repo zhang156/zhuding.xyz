@@ -23,6 +23,7 @@
                   @click="tagClick(index)" v-for="(item,index) in tags" :key="item.name">
                   {{ item.name }}
                 </div>
+                <el-button type="info" icon="el-icon-plus" @click.native="addTag">标签</el-button>
               </div>
             </el-form-item>
 
@@ -63,6 +64,21 @@
         </div>
       </card>
     </div>
+
+    <!-- dialog -->
+    <el-dialog
+      :title="titleText"
+      :visible="dialogVisible">
+      <el-form v-model="tagForm" ref="tagForm" label-width="50px">
+        <el-form-item label="名称">
+          <el-input v-model="tagForm.name"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click.native="dialogVisible=false">取消</el-button>
+        <el-button type="primary" @click.native="submitDialog">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -75,12 +91,12 @@ export default {
   name: 'article',
   components: { card, zSelect },
   props: {
-    form: { type: Object, default: {description: '', content: '', tag: [], category: [], state: 1, public: 1} },
-    tags: { type: Array, default: [] },
-    category: { type: Array, default: [] }
+    tags: { type: Array },
+    category: { type: Array }
   },
   data () {
     return {
+      form: {description: '', content: '', tag: [], category: [], state: 1, public: 1},
       stateOptions: [{label: '直接发布', value: 1}, {label: '保存草稿', value: 2}],
       publicOptions: [{label: '公开', value: 1}, {label: '私密', value: 2}],
       editorOptions: {
@@ -89,13 +105,25 @@ export default {
         theme: 'base16-dark',
         lineNumbers: true,
         line: true
-      }
+      },
+      titleText: '',
+      dialogVisible: false,
+      tagForm: {}
     }
   },
   created () {
     this.initTags(this.tags)
   },
   methods: {
+    submitDialog () {
+      // 提交tag
+      console.log(this.tagForm)
+      this.$store.dispatch('addTag', this.tagForm)
+    },
+    addTag () {
+      this.titleText = '新增标签'
+      this.dialogVisible = true
+    },
     updateCategory () {
 
     },
@@ -175,20 +203,22 @@ export default {
 
 <style lang="scss">
   .article {
-    .el-form-item__label {
-      color: #fff;
-    }
 
-    // input, textarea
-    .el-input, .el-textarea {
-      input, textarea {
-        background: #3c4147;
-        border: 1px solid rgba(34, 40, 46, .3);
+    .card_wrap {
+      .el-form-item__label {
         color: #fff;
-        // font-size: 1.2rem;
+      }
 
-        &:focus {
-          border: 1px solid rgba(34, 40, 46, 1);
+      .el-input, .el-textarea {
+        input, textarea {
+          background: #3c4147;
+          border: 1px solid rgba(34, 40, 46, .3);
+          color: #fff;
+          // font-size: 1.2rem;
+
+          &:focus {
+            border: 1px solid rgba(34, 40, 46, 1);
+          }
         }
       }
     }

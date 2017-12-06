@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 
 const service = axios.create({
-    baseURL: 'http://localhost:8001/'
+    baseURL: 'http://localhost:3001/'
 })
 service.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8'
 

@@ -26,7 +26,6 @@ export default () => new Vuex.Store({
     loadArticles ({ commit }, params = {page: 1}) {
       commit('requestStart')
       return Service.get('/article', { params }).then((res) => {
-        // console.log(res.data.result.data[0])
         commit('requestEnd')
         commit('loadArticles', res.data.result.data)
       })
@@ -54,6 +53,14 @@ export default () => new Vuex.Store({
         } else {
           commit('loadTagsFail')
         }
+      })
+    },
+    // 新增标签
+    addTag ({ commit }, params) {
+
+      Service.post('/tags', params).then((res) => {
+        console.log(res.data)
+        commit('addTag', res.data.result)
       })
     },
     // 获取类别
@@ -100,7 +107,16 @@ export default () => new Vuex.Store({
         loadTags (state, param) {
           state.tags = param
         },
-        loadTagsFail (state, param) {
+        addTag (state, param) {
+          state.tags.push(param)
+        },
+        reqStart (state) {
+          state.fetching = true
+        },
+        reqSuccess (state) {
+          state.fetching = false
+        },
+        loadTagsFail (state) {
           state.fetching = false
         }
       }

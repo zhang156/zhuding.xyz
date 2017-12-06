@@ -1,16 +1,35 @@
 <template>
   <div id="publishArticle">
-    <Article></Article>
+    <article-build :tags="tags" :category="category"></article-build>
   </div>
 </template>
 
 <script>
-import Article from '~/components/article'
+import articleBuild from '~/components/article'
 
 export default {
   name: 'publishArticle',
   layout: 'admin',
-  components: { Article }  
+  components: { articleBuild },
+  fetch ({ store }) {
+    return Promise.all([
+      store.dispatch('loadTags'),
+      store.dispatch('loadCategory')
+    ])
+  },
+  data () {
+    return {
+      
+    }
+  },
+  computed: {
+    tags () {
+      return this.$store.state.tag.tags
+    },
+    category () {
+      return this.$store.state.category.category
+    }
+  }
 }
 </script>
 

@@ -21,7 +21,7 @@
       <article-list :articles="articles"></article-list>
     </template>
     
-    <empty v-if="!articles.length && !fetching"></empty>
+    <empty v-if="!articles.length && !fetching" isSearch></empty>
   </section>
 </template>
 
