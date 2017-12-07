@@ -20,5 +20,4 @@ service.interceptors.response.use(response => {
 })
 
 Vue.prototype.$http = axios
-
 export default service

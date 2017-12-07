@@ -49,24 +49,17 @@ export default () => new Vuex.Store({
       return Service.get('/tags').then(res => {
         var success = res.status && res.data && res.data.code
         if (success) {
-          commit('loadTags', res.data.result)
+          commit('tag/loadTags', res.data.result)
+          commit('tag/reqSuccess')
         } else {
-          commit('loadTagsFail')
+          commit('tag/reqFail')
         }
-      })
-    },
-    // 新增标签
-    addTag ({ commit }, params) {
-
-      Service.post('/tags', params).then((res) => {
-        console.log(res.data)
-        commit('addTag', res.data.result)
       })
     },
     // 获取类别
     loadCategory ({ commit }) {
       return Service.get('/category').then(res => {
-        commit('loadCategory', res.data.result)
+        commit('category/loadCategory', res.data.result)
       })
     }
   },
@@ -99,6 +92,7 @@ export default () => new Vuex.Store({
     },
     // 标签
     tag: {
+      namespaced: true,
       state: {
         tags: [],
         fetching: false
@@ -116,19 +110,23 @@ export default () => new Vuex.Store({
         reqSuccess (state) {
           state.fetching = false
         },
-        loadTagsFail (state) {
+        reqFail (state) {
           state.fetching = false
         }
       }
     },
     // 类别
     category: {
+      namespaced: true,
       state: {
         category: []
       },
       mutations: {
         loadCategory (state, param) {
           state.category = param
+        },
+        addCategory (state, param) {
+          state.category.push(param)
         }
       }
     }

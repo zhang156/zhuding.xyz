@@ -44,9 +44,9 @@
       <card title="分类目录" class="category">
         <div slot="card_content" class="category_content">
           <el-checkbox-group v-model="form.category">
-            <el-checkbox v-for="item in category" :key="item" :label="item"></el-checkbox>
+            <el-checkbox v-for="item in category" :key="item.name" :label="item.name"></el-checkbox>
           </el-checkbox-group>
-          <el-button type="info" @click="updateCategory">更新分类</el-button>
+          <el-button type="info" @click="addCategory" icon="el-icon-plus">分类</el-button>
         </div>
       </card>
 
@@ -54,13 +54,45 @@
         <div slot="card_content" class="publish_content">
           <div class="publish_content_item">
             <label>状态</label>
-            <zSelect v-model="form.state" :options="stateOptions"></zSelect>
+            <el-select size="small" v-model="form.state" placeholder="请选择">
+              <el-option 
+                v-for="item in stateOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </div>
 
           <div class="publish_content_item">
             <label>公开度</label>
-            <zSelect v-model="form.public" :options="publicOptions"></zSelect>
+            <el-select size="small" v-model="form.public" placeholder="请选择">
+              <el-option 
+                v-for="item in publicOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </div>
+        </div>
+      </card>
+
+      <card title="缩略图" class="thumb">
+        <div slot="card_content">
+          <el-upload 
+            class="thumb-uploader"
+            action="http://upload.qiniu.com/"
+            accept="image/*"
+            :headers="{'Content-Type':'multipart/form-data'}"
+            :show-file-list="false"
+            :data="thumbUploadData"
+            :before-upload="beforeThumbUpload"
+            :on-success="handleThumbSuccess">
+            <img v-if="thumbUrl" :src="thumbUrl" class="thumb-img">
+            <i v-else class="el-icon-plus thumb-uploader-icon"></i>
+          </el-upload>
+          <input type="file" @change="fileUpload"/>
         </div>
       </card>
     </div>
@@ -69,15 +101,29 @@
     <el-dialog
       :title="titleText"
       :visible="dialogVisible">
-      <el-form v-model="tagForm" ref="tagForm" label-width="50px">
-        <el-form-item label="名称">
-          <el-input v-model="tagForm.name"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button @click.native="dialogVisible=false">取消</el-button>
-        <el-button type="primary" @click.native="submitDialog">确定</el-button>
-      </div>
+      <template v-if="choose.isTag">
+        <el-form v-model="tagForm" ref="tagForm" label-width="50px">
+          <el-form-item label="名称">
+            <el-input v-model="tagForm.name"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button @click.native="dialogVisible=false">取消</el-button>
+          <el-button type="primary" @click.native="tagSubmitDialog">确定</el-button>
+        </div>
+      </template>
+
+      <template v-if="choose.isCategory">
+        <el-form v-model="categoryForm" ref="categoryForm" label-width="50px">
+          <el-form-item label="名称">
+            <el-input v-model="categoryForm.name"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button @click.native="dialogVisible=false">取消</el-button>
+          <el-button type="primary" @click.native="categorySubmitDialog">确定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -108,24 +154,105 @@ export default {
       },
       titleText: '',
       dialogVisible: false,
-      tagForm: {}
+      tagForm: {},
+      categoryForm: {},
+      choose: {isTag: false, isCategory: false},
+      thumbUrl: '',
+      thumbUploadData: {}
     }
   },
   created () {
     this.initTags(this.tags)
   },
   methods: {
-    submitDialog () {
-      // 提交tag
-      console.log(this.tagForm)
-      this.$store.dispatch('addTag', this.tagForm)
+    fileUpload (event) {
+      Service.get('/qiniu').then(res => {
+        if (res && res.data.uptoken) {
+          console.log(res.data.uptoken)
+          this.$http.post('http://upload.qiniu.com/', {file: event.target.files[0], token: res.data.uptoken}).then(res => {
+            console.log(res)
+          })
+        }
+      })
+    },
+    handleThumbSuccess (response, file, fileList) {
+      this.thumbUrl = URL.createObjectURL(file.raw)
+    },
+    beforeThumbUpload (file) {
+      Service.get('/qiniu').then(res => {
+        if (res && res.data.uptoken) {
+          console.log(res.data.uptoken)
+          this.$set(this.thumbUploadData, 'token', res.data.uptoken)
+          
+          return false
+        } else {
+          return false
+        }
+      })
+    },
+    tagSubmitDialog () {
+      const loading = this.submitLoading()
+      Service.post('/tags', this.tagForm).then((res) => {
+        loading.close()
+        if (res && res.data.code === 1) {
+          this.openNotify('success', res.data.message)
+          this.$store.commit('tag/addTag', res.data.result)
+          this.dialogVisible = false
+        } else {
+          this.openNotify('fail', res.data.message)
+        }
+      })
     },
     addTag () {
+      this.chooseForm('isTag')
       this.titleText = '新增标签'
       this.dialogVisible = true
     },
-    updateCategory () {
-
+    chooseForm (val) {
+      Object.keys(this.choose).map(item => this.choose[item] = false)
+      this.choose[val] = true
+    },
+    submitLoading () {
+      return this.$loading({
+        lock: true,
+        text: '',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, .6)',
+        customClass: 'loading_article'
+      })
+    },
+    openNotify (val, message) {
+      if (val === 'fail') {
+        this.$notify.error({
+          title: '错误',
+          message: message,
+          duration: 2000
+        })
+      } else {
+        this.$notify.success({
+          title: '成功',
+          message: message,
+          duration: 2000
+        })
+      }
+    },
+    addCategory () {
+      this.chooseForm('isCategory')
+      this.titleText = '新增分类'
+      this.dialogVisible = true
+    },
+    categorySubmitDialog () {
+      const loading = this.submitLoading()
+      Service.post('/category', this.categoryForm).then(res => {
+        loading.close()
+        if (res && res.data.result) {
+          this.openNotify('success', res.data.message)
+          this.$store.commit('category/addCategory', res.data.result)
+          this.dialogVisible = false
+        } else {
+          this.openNotify('fail', res.data.message)
+        }
+      })
     },
     saveArticle () {
       this.getActiveTags()
@@ -190,9 +317,13 @@ export default {
       .publish {
         .publish_content {
           .publish_content_item {
+            padding: .2rem 0;
+            display: flex;
+
             label {
               display: inline-block;
-              width: 80px;
+              width: 60px;
+              vertical-align: middle;
             }
           }
         }
@@ -203,6 +334,48 @@ export default {
 
 <style lang="scss">
   .article {
+
+    .thumb {
+      .card_content {
+        text-align: center;
+      }
+      .thumb-uploader {
+        display: inline-block;
+
+        .el-upload {
+          border: 1px dashed #d9d9d9;
+          border-radius: 5px;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+
+          &:hover {
+            border-color: #409EFF;
+          }
+
+          .thumb-img {
+            width: 178px;
+            height: 178px;
+            display: block;
+          }
+
+          .thumb-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            line-height: 178px;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    .publish_content_item {
+      .el-select {
+        flex: 1; 
+      }
+    }
 
     .card_wrap {
       .el-form-item__label {
@@ -261,7 +434,21 @@ export default {
         }
       }
     }
+  }
 
+  .el-loading-mask {
+    .el-loading-spinner {
+      font-size: 3rem;
+
+      .el-icon-loading {
+        color: rgba(255, 255, 255, .7);
+      }
+
+      .el-loading-text {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, .7);
+      }
+    }
   }
 </style>
 
