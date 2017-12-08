@@ -18,6 +18,7 @@ export default {
 
 <style lang="scss" scoped>
   .card {
+    margin-bottom: 1rem;
     
     .card_head {
       font-size: 1rem;

@@ -82,18 +82,24 @@
         <div slot="card_content">
           <el-upload 
             class="thumb-uploader"
-            action="http://upload.qiniu.com/"
+            action="http://localhost:3001/uploadFile"
             accept="image/*"
-            :headers="{'Content-Type':'multipart/form-data'}"
             :show-file-list="false"
             :data="thumbUploadData"
-            :before-upload="beforeThumbUpload"
-            :on-success="handleThumbSuccess">
+            :before-upload="beforeUpload"
+            :on-success="handleThumbSuccess"
+            :on-error="handleThumbError"
+            :on-progress="uploadProgress">
             <img v-if="thumbUrl" :src="thumbUrl" class="thumb-img">
-            <i v-else class="el-icon-plus thumb-uploader-icon"></i>
+            <i v-if="!thumbUrl&&!progressShow" class="el-icon-plus thumb-uploader-icon"></i>
+            <el-progress
+              type="circle"
+              v-if="progressShow"
+              :percentage="uploadPercentage"
+              :status="uploadStatus">
+            </el-progress>
           </el-upload>
-          <input type="file" @change="fileUpload"/>
-        </div>
+          </div>
       </card>
     </div>
 
@@ -158,37 +164,36 @@ export default {
       categoryForm: {},
       choose: {isTag: false, isCategory: false},
       thumbUrl: '',
-      thumbUploadData: {}
+      thumbUploadData: {},
+      uploadPercentage: 0,
+      uploadStatus: '',
+      progressShow: false
     }
   },
   created () {
     this.initTags(this.tags)
   },
+  mounted () {},
   methods: {
-    fileUpload (event) {
-      Service.get('/qiniu').then(res => {
-        if (res && res.data.uptoken) {
-          console.log(res.data.uptoken)
-          this.$http.post('http://upload.qiniu.com/', {file: event.target.files[0], token: res.data.uptoken}).then(res => {
-            console.log(res)
-          })
-        }
-      })
+    uploadProgress (event, file, fileList) {
+      if (event.percent <= 90) {
+        this.uploadPercentage = parseInt(event.percent)
+      }
+    },
+    beforeUpload (file) {
+      this.thumbUrl = URL.createObjectURL(file)
+      this.progressShow = true
+      this.uploadPercentage = 0
+      this.uploadStatus = ''
     },
     handleThumbSuccess (response, file, fileList) {
-      this.thumbUrl = URL.createObjectURL(file.raw)
+      this.uploadPercentage = 100
+      this.uploadStatus = 'success'
+      this.progressShow = false
     },
-    beforeThumbUpload (file) {
-      Service.get('/qiniu').then(res => {
-        if (res && res.data.uptoken) {
-          console.log(res.data.uptoken)
-          this.$set(this.thumbUploadData, 'token', res.data.uptoken)
-          
-          return false
-        } else {
-          return false
-        }
-      })
+    handleThumbError (err, file, fileList) {
+      this.uploadStatus = 'exception'
+      this.progressShow = false
     },
     tagSubmitDialog () {
       const loading = this.submitLoading()
@@ -310,10 +315,6 @@ export default {
     .options_wrap {
       flex: 1;
 
-      .category {
-        margin-bottom: 1rem;
-      }
-
       .publish {
         .publish_content {
           .publish_content_item {
@@ -334,23 +335,40 @@ export default {
 
 <style lang="scss">
   .article {
-
     .thumb {
       .card_content {
         text-align: center;
       }
       .thumb-uploader {
         display: inline-block;
+        box-sizing: border-box;
 
         .el-upload {
-          border: 1px dashed #d9d9d9;
+          width: 178px;
+          height: 178px;
+          border: 1px solid #d9d9d9;
           border-radius: 5px;
           cursor: pointer;
           position: relative;
           overflow: hidden;
+          transition: all .5s;
 
           &:hover {
             border-color: #409EFF;
+          }
+
+          .el-progress--circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, .7);
+            z-index: 1;
+
+            .el-progress-circle {
+              display: inline
+            }
           }
 
           .thumb-img {
