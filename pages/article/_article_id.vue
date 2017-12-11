@@ -2,6 +2,9 @@
   <div class="article">
     <div class="article_wrap">
       <div class="article_title">{{ article.title }}</div>
+      <div class="img-wrap">
+        <img :src="article.thumb" alt="pic" :onclick="`if(window.utils) window.utils.openImgPopup('${article.thumb}')`">`
+      </div>
       <div class="article_content" v-html="articleDetail"></div>
     </div>
 
@@ -58,6 +61,23 @@ export default {
         padding: .5em 0 1em;
         text-align: center;
         color: #555;
+      }
+
+      img {
+        max-width: 100%;
+        margin: 0 auto;
+        display: block;
+        text-align: center;
+        border-radius: $radius;
+        border: .5rem solid $module-hover-bg;
+        transition: all .25s;
+        opacity: .9;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 1;
+          transition: all .25s;
+        }
       }
     }
 

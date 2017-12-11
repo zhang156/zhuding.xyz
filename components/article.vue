@@ -10,11 +10,11 @@
             </el-form-item>
 
             <el-form-item label="文章关键字">
-              <el-input v-model="form.keywords"></el-input>
+              <el-input v-model="keywords"></el-input>
             </el-form-item>
 
             <el-form-item label="文章描述">
-              <el-input type="textarea" v-model="form.description" :autosize="{minRows:3}"></el-input>
+              <el-input type="textarea" v-model="form.description" :autosize="{minRows:3}" required></el-input>
             </el-form-item>
 
             <el-form-item label="文章标签">
@@ -23,12 +23,12 @@
                   @click="tagClick(index)" v-for="(item,index) in tags" :key="item.name">
                   {{ item.name }}
                 </div>
-                <el-button type="info" icon="el-icon-plus" @click.native="addTag">标签</el-button>
+                <el-button class="addTagBtn" type="info" icon="el-icon-plus" @click.native="addTag">标签</el-button>
               </div>
             </el-form-item>
 
             <el-form-item label="文章内容">
-              <el-input type="textarea" v-model="form.content" :autosize="{minRows:5}"></el-input>
+              <el-input type="textarea" v-model="form.content" :autosize="{minRows:5}" required></el-input>
               <!-- <codemirror v-model="form.code" :options="editorOptions"></codemirror> -->
             </el-form-item>
 
@@ -144,11 +144,12 @@ export default {
   components: { card, zSelect },
   props: {
     tags: { type: Array },
-    category: { type: Array }
+    category: { type: Array },
+    articleForm: {type: Object}
   },
   data () {
     return {
-      form: {description: '', content: '', tag: [], category: [], state: 1, public: 1},
+      form: this.articleForm?this.articleForm:{description: '', keywords: [], thumb: '', content: '', tag: [], category: [], state: 1, public: 1},
       stateOptions: [{label: '直接发布', value: 1}, {label: '保存草稿', value: 2}],
       publicOptions: [{label: '公开', value: 1}, {label: '私密', value: 2}],
       editorOptions: {
@@ -170,6 +171,16 @@ export default {
       progressShow: false
     }
   },
+  computed: {
+    keywords: {
+      get () {
+        return this.form.keywords.join(',')
+      },
+      set (val) {
+        this.form.keywords = val.split(',')
+      }
+    }
+  },
   created () {
     this.initTags(this.tags)
   },
@@ -187,9 +198,13 @@ export default {
       this.uploadStatus = ''
     },
     handleThumbSuccess (response, file, fileList) {
+      console.log(response)
+      this.form.thumb = response.result.origin + '/' + response.result.key
       this.uploadPercentage = 100
       this.uploadStatus = 'success'
-      this.progressShow = false
+      setTimeout(() => {
+        this.progressShow = false
+      }, 500)
     },
     handleThumbError (err, file, fileList) {
       this.uploadStatus = 'exception'
@@ -262,9 +277,33 @@ export default {
     saveArticle () {
       this.getActiveTags()
       console.log(this.form)
-      return
+
+      // 校验
+      for (let item in this.form) {
+        if (this.form[item] instanceof Array) {
+          if (!this.form[item].length) {
+            this.openNotify('fail', '请检查您的输入项')
+            return
+          }
+        } else if (typeof this.form[item] !== "number" && !this.form[item]){
+          this.openNotify('fail', '请检查您的输入项')
+          return
+        }
+      }
+      this.articleSubmit()
+    },
+    articleSubmit () {
+      const loading = this.submitLoading()
       Service.post('/article', this.form).then((res) => {
         console.log(res)
+        loading.close()
+        if (res && res.data.result) {
+          this.openNotify('success', res.data.message)
+          // 清空表单
+          this.form = {description: '', keywords: [], thumb: '', content: '', tag: [], category: [], state: 1, public: 1}
+        } else {
+          this.openNotify('fail', res.data.message)
+        }
       })
     },
     getActiveTags () {
@@ -275,6 +314,13 @@ export default {
     },
     initTags (tags) {
       tags.map(item => {
+        if (this.form.tag.length) {
+          this.form.tag.map(i => {
+            if (i === item.name) {
+              this.$set(item, 'active', true);
+            }
+          })
+        }
         this.$set(item, 'active', false);
       })
     },
@@ -304,10 +350,14 @@ export default {
           &:hover {
             cursor: pointer;
           }
+
+          &.active {
+            background: #007f7d;
+          }
         }
 
-        .article_tag.active {
-          background: #007f7d;
+        .addTagBtn {
+          margin: .5rem 0 0 0;
         }
       }
     }

@@ -45,7 +45,7 @@
           <span class="meta meta_category">
             <i class="iconfont icon-menu"></i>
             <span class="meta_text" v-if="!item.category.length">未分类</span>
-            <span class="meta_text" v-else>{{ item.meta.category[0] }}</span>
+            <span class="meta_text" v-else>{{ item.category[0] }}</span>
           </span>
         </div>
       </div>
