@@ -1,23 +1,6 @@
 <template>
   <div class="article">
-    <div class="article_wrap">
-      <div class="article_title">{{ article.title }}</div>
-      <div class="img-wrap">
-        <img :src="article.thumb" alt="pic" :onclick="`if(window.utils) window.utils.openImgPopup('${article.thumb}')`">`
-      </div>
-      <div class="article_content" v-html="articleDetail"></div>
-    </div>
-
-    <div class="article_info">
-      <p>本文于{{ article.create_at | toYMD }}发布于{{article.category.length?article.category[0]:'CODE'}}分类下，当前已被浏览{{article.meta.views}}次</p>
-      <p>相关标签：{{ article.tag.length?article.tag.join('、'):'web开发' }}</p>
-      <p>临时地址：<router-link :to="`http://zhuding.xyz${$route.path}`">{{`http://zhuding.xyz${$route.path}`}}</router-link></p>
-      <p>版权申明：自由转载-署名-非商业性使用</p>
-    </div>
-
-    <div class="comments_wrap">
-      <comment></comment>
-    </div>
+    
   </div>
 </template>
 

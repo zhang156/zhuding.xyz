@@ -164,7 +164,7 @@ export default {
       tagForm: {},
       categoryForm: {},
       choose: {isTag: false, isCategory: false},
-      thumbUrl: '',
+      thumbUrl: this.articleForm?this.articleForm.thumb:'',
       thumbUploadData: {},
       uploadPercentage: 0,
       uploadStatus: '',
@@ -281,21 +281,39 @@ export default {
       // 校验
       for (let item in this.form) {
         if (this.form[item] instanceof Array) {
-          if (!this.form[item].length) {
-            this.openNotify('fail', '请检查您的输入项')
+          if (!this.form[item].length && item !== 'extends') {
+            console.log(item)
+            this.openNotify('fail', '请检查您的输入项1')
             return
           }
-        } else if (typeof this.form[item] !== "number" && !this.form[item]){
-          this.openNotify('fail', '请检查您的输入项')
+        } else if (typeof this.form[item] !== "number" && !this.form[item] && item !== 'password'){
+          this.openNotify('fail', '请检查您的输入项2')
           return
         }
       }
-      this.articleSubmit()
+
+      if (!this.articleForm) {
+        this.articleSubmit()
+      } else {
+        this.articleUpdate()
+      }
+    },
+    articleUpdate () {
+      const loading = this.submitLoading()
+      Service.put('/article', this.form).then(res => {
+        console.log(res)
+        loading.close()
+        if (res && res.data.result) {
+          this.openNotify('success', res.data.message)
+          this.$emit('updateSuccess', res.data.result)
+        } else {
+          this.openNotify('fail', res.data.message)
+        }
+      })
     },
     articleSubmit () {
       const loading = this.submitLoading()
       Service.post('/article', this.form).then((res) => {
-        console.log(res)
         loading.close()
         if (res && res.data.result) {
           this.openNotify('success', res.data.message)
@@ -313,16 +331,15 @@ export default {
       })
     },
     initTags (tags) {
-      tags.map(item => {
-        if (this.form.tag.length) {
-          this.form.tag.map(i => {
-            if (i === item.name) {
-              this.$set(item, 'active', true);
-            }
-          })
+      for (let i = 0, len = tags.length; i < len; i++) {
+        this.$set(tags[i], 'active', false)
+        for (let j = 0, len2 = this.form.tag.length; j < len2; j++) {
+          if (tags[i].name === this.form.tag[j]) {
+            tags[i].active = true
+            break
+          }
         }
-        this.$set(item, 'active', false);
-      })
+      }
     },
     tagClick (index) {
       this.tags[index].active = !this.tags[index].active
@@ -500,21 +517,6 @@ export default {
           }
           
         }
-      }
-    }
-  }
-
-  .el-loading-mask {
-    .el-loading-spinner {
-      font-size: 3rem;
-
-      .el-icon-loading {
-        color: rgba(255, 255, 255, .7);
-      }
-
-      .el-loading-text {
-        font-size: 1.2rem;
-        color: rgba(255, 255, 255, .7);
       }
     }
   }

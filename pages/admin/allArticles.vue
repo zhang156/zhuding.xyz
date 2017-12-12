@@ -1,7 +1,7 @@
 <template>
   <div class="allArticles">
     <template v-if="!isArticleEdit">
-      <el-radio-group v-model="tabValue" class="tabGroup">
+      <el-radio-group v-model="tabValue" class="tabGroup" size="small">
         <el-radio-button label="1">{{ '全部' + (tabValue=='1'?'('+articles.length+')':'') }}</el-radio-button>
         <el-radio-button label="2">{{ '已发布' + (tabValue=='2'?'('+articles.length+')':'') }}</el-radio-button>
         <el-radio-button label="3">{{ '草稿' + (tabValue=='3'?'('+articles.length+')':'') }}</el-radio-button>
@@ -96,11 +96,19 @@
               type="warning"
               @click="editArticle(scope.row)">编辑文章</el-button>
             <el-button
+              v-if="scope.row.state!==2"
               size="mini"
               class="miniBtn"
               type="success"
-              @click="moveToDraft(scope.row)">移到草稿</el-button>
+              @click="moveToDraft(scope.row)">{{ scope.row.state===1?'移到草稿':'还原草稿' }}</el-button>
             <el-button
+              v-if="scope.row.state===2"
+              size="mini"
+              class="miniBtn"
+              type="success"
+              @click="pubilsh(scope.row)">发布文章</el-button>
+            <el-button
+              v-if="scope.row.state!==0"
               size="mini"
               class="miniBtn"
               type="danger"
@@ -110,13 +118,14 @@
       </el-table>
     </template>
     <template v-if="isArticleEdit">
-      <article-edit :articleForm="articleForm" :tags="tags" :category="category"></article-edit>
+      <article-edit :articleForm="articleForm" :tags="tags" :category="category" @updateSuccess="updateSuccess"></article-edit>
     </template>
   </div>
 </template>
 
 <script>
 import articleEdit from '~/components/article'
+import Service from '~/plugins/axios.js'
 
 export default {
   name: 'allArticles',
@@ -131,15 +140,17 @@ export default {
   },
   components: { articleEdit },
   computed: {
-    articles() {
-      if (this.tabValue === '1') {
-        return this.$store.state.article.articleList
-      } else if (this.tabValue === '2') {
-        return this.$store.state.article.articleList.filter(item => item.state === 1)
-      } else if (this.tabValue === '3') {
-        return this.$store.state.article.articleList.filter(item => item.state === 2)
-      } else if (this.tabValue === '4') {
-        return this.$store.state.article.articleList.filter(item => item.state === 0)
+    articles: {
+      get () {
+        if (this.tabValue === '1') {
+          return this.$store.state.article.articleList
+        } else if (this.tabValue === '2') {
+          return this.$store.state.article.articleList.filter(item => item.state === 1)
+        } else if (this.tabValue === '3') {
+          return this.$store.state.article.articleList.filter(item => item.state === 2)
+        } else if (this.tabValue === '4') {
+          return this.$store.state.article.articleList.filter(item => item.state === 0)
+        }
       }
     },
     tags () {
@@ -164,14 +175,63 @@ export default {
       this.articleForm = row
       this.isArticleEdit = true
     },
+    updateSuccess (result) {
+      this.$store.commit('article/updateArticle', result)
+      this.isArticleEdit = false
+    },
+    updateArticle (row) {
+      const loading = this.submitLoading()
+      Service.put('/article', row).then(res => {
+        loading.close()
+        if (res && res.data.result) {
+          this.$store.commit('article/updateArticle', row)
+          this.openNotify('success', res.data.message)
+        } else {
+          this.openNotify('fail', res.data.message)
+        }
+      })
+    },
     moveToDraft (row) {
-
+      var sendData = Object.assign({}, row)
+      sendData.state = 2
+      this.updateArticle(sendData)
+    },
+    pubilsh (row) {
+      var sendData = Object.assign({}, row)
+      sendData.state = 1
+      this.updateArticle(sendData)
     },
     moveToRecycle (row) {
-
+      var sendData = Object.assign({}, row)
+      sendData.state = 0
+      this.updateArticle(sendData)
     },
     readArticle (row) {
-
+      this.$router.push('/article/' + row.id)
+    },
+    submitLoading () {
+      return this.$loading({
+        lock: true,
+        text: '',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, .6)',
+        customClass: 'loading_article'
+      })
+    },
+    openNotify (val, message) {
+      if (val === 'fail') {
+        this.$notify.error({
+          title: '错误',
+          message: message,
+          duration: 2000
+        })
+      } else {
+        this.$notify.success({
+          title: '成功',
+          message: message,
+          duration: 2000
+        })
+      }
     }
   }
 }

@@ -24,24 +24,25 @@ export default () => new Vuex.Store({
     },
     // 获取文章列表
     loadArticles ({ commit }, params = {page: 1}) {
-      commit('requestStart')
+      commit('article/requestStart')
       return Service.get('/article', { params }).then((res) => {
-        commit('requestEnd')
-        commit('loadArticles', res.data.result.data)
+        commit('article/requestEnd')
+        commit('article/loadArticles', res.data.result.data)
       })
     },
     // 获取热点文章
     loadHotArticles ({ commit }, params = {page: 1}) {
       return Service.get('/hotArticle', { params }).then((res) => {
         // console.log(res.data.result.data)
-        commit('loadHotArticles', res.data.result.data)
+        commit('article/loadHotArticles', res.data.result.data)
       })
     },
     // 获取文章详情
     loadArticleDetail ({ commit }, params) {
+      console.log(1)
       return Service.get(`/article/${params.article_id}`).then((res) => {
-        // console.log(res.data.result)
-        commit('loadArticleDetail', res.data.result)
+        console.log(res.data.result)
+        commit('article/loadArticleDetail', res.data.result)
       })
     },
     // 获取标签
@@ -66,6 +67,7 @@ export default () => new Vuex.Store({
   modules: {
     // 文章
     article: {
+      namespaced: true,
       state: {
         articleList: [],
         articleDetail: {},
@@ -87,6 +89,15 @@ export default () => new Vuex.Store({
         },
         loadArticleDetail (state, param) {
           state.articleDetail = param
+        },
+        updateArticle (state, param) {
+          for (let i = 0, len = state.articleList.length; i < len; i++) {
+            if (state.articleList[i].id == param.id) {
+              state.articleList[i] = param
+              break
+            }
+          }
+          state.articleList = [].concat(state.articleList)
         }
       }
     },

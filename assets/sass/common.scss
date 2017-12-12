@@ -281,3 +281,18 @@ a {
 .aside-enter, .aside-leave-active {
   opacity: 0
 }
+
+.el-loading-mask {
+  .el-loading-spinner {
+    font-size: 3rem;
+
+    .el-icon-loading {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .el-loading-text {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, .7);
+    }
+  }
+}

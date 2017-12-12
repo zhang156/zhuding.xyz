@@ -36,13 +36,12 @@ export default {
   name: 'index',
   fetch ({ store }) {
     return Promise.all([
-      store.dispatch('loadArticles')
+      store.dispatch('loadArticles', {page: 1, state: 1, public: 1})
     ])
   },
   components: {articleList, pageFooter, empty, loading},
   data () {
     return {
-      banners: ['/images/lunbo1.jpg', '/images/lunbo2.jpg'],
       swiperOption: {
         autoplay: 3000,
         initialSlide: 0,
@@ -57,6 +56,9 @@ export default {
   computed : {
     articles () {
       return this.$store.state.article.articleList
+    },
+    banners () {
+      return this.articles.map(item => item.thumb).slice(0, 7)
     },
     fetching () {
       return this.$store.state.article.fetching
